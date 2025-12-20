@@ -37,7 +37,7 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <h1 className="font-bold text-3xl text-gray-700">MicroLoan</h1>
+        <h1 className="font-bold text-4xl text-gray-700">LoanLink</h1>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
