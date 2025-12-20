@@ -4,10 +4,10 @@ import Logo from '../../assets/logo.png'
 
 const Navbar = () => {
      const links = <>
-     <li className="font-semibold text-gray-600 text-[16px]"><NavLink to='/'>Home</NavLink></li>
-     <li className="font-semibold text-gray-600 text-[16px]"><NavLink to='/allLoans'>All Loans</NavLink></li>
-     <li className="font-semibold text-gray-600 text-[16px]"><NavLink to='/aboutUs'>About Us</NavLink></li>
-     <li className="font-semibold text-gray-600 text-[16px]"><NavLink to='/contact'>Contact</NavLink></li>
+     <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/'>Home</NavLink></li>
+     <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/all-loans'>All Loans</NavLink></li>
+     <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/about'>About Us</NavLink></li>
+     <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/contact'>Contact</NavLink></li>
      </>
   return (
     <div className="navbar bg-base-100 shadow-sm">
