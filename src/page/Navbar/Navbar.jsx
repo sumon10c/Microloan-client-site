@@ -45,8 +45,8 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <button className="btn bg-primary font-semibold text-[16px] text-white mr-[5px]"><Link to='/login'>Login</Link></button>
-        <button className="btn bg-primary font-semibold text-[16px] text-white"><Link to='/register'>Register</Link></button>
+        <button className="btn bg-primary hover:bg-blue-500 font-semibold text-[16px] text-white mr-[5px]"><Link to='/login'>Login</Link></button>
+        <button className="btn bg-primary hover:bg-blue-500 font-semibold text-[16px] text-white"><Link to='/register'>Register</Link></button>
       </div>
     </div>
   );

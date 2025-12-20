@@ -155,7 +155,7 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="md:col-span-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-200 dark:shadow-none"
+                className="md:col-span-2 w-full bg-primary hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-200 dark:shadow-none"
               >
                 <span>মেসেজ পাঠান</span>
                 <FaPaperPlane />
