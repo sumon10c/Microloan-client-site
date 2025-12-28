@@ -19,5 +19,13 @@ body{
     name: "light";
     default: true;
     --color-primary: var(--color-accent);
-    --color-secondary: #28A745;
+    --color-secondary: #EFF6FF;
+  }
+
+
+
+  .card-img {
+    width: 100%;       /* Card er puro width nibe */
+    height: 200px;     /* Ekta fixed height */
+    object-fit: cover; /* Ete chobi stretch hobe na, kete giyeo fit thakbe */
   }

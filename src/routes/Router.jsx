@@ -5,6 +5,9 @@ import About from "../page/About/About";
 import Contact from "../page/Contact/Contact";
 import AllLoan from "../page/All Loan/AllLoan";
 import Error from "../page/Error/Error";
+import Login from "../page/Navbar/Firebase/Login";
+import Register from "../page/Navbar/Firebase/Register";
+import CardDetails from "../page/All Loan/Loan-card/CardDetails";
 
 export const router = createBrowserRouter([
     {
@@ -27,6 +30,18 @@ export const router = createBrowserRouter([
         {
           path:'/contact',
           Component:Contact
+        },
+        {
+          path:'/login',
+          Component: Login
+        },
+        {
+          path:'/register',
+          Component: Register
+        },
+        {
+          path:'/cardDetails',
+          Component:CardDetails
         }
       ]
     },

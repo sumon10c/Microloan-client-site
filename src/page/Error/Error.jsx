@@ -1,13 +1,12 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router';
-import { FaHome, FaExclamationTriangle } from 'react-icons/fa';
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router";
+import { FaHome, FaExclamationTriangle } from "react-icons/fa";
 
 const Error = () => {
-    return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center px-6">
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center px-6">
       <div className="text-center">
-        
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1, rotate: 360 }}
@@ -19,7 +18,6 @@ const Error = () => {
           </div>
         </motion.div>
 
-        
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -44,10 +42,10 @@ const Error = () => {
           transition={{ delay: 0.6 }}
           className="text-slate-600 dark:text-slate-400 max-w-md mx-auto mb-10"
         >
-          আপনি যে লিঙ্কটি খুঁজছেন তা সম্ভবত সরিয়ে ফেলা হয়েছে অথবা আপনি ভুল ইউআরএল টাইপ করেছেন।
+          আপনি যে লিঙ্কটি খুঁজছেন তা সম্ভবত সরিয়ে ফেলা হয়েছে অথবা আপনি ভুল
+          ইউআরএল টাইপ করেছেন।
         </motion.p>
 
-      
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -55,7 +53,7 @@ const Error = () => {
         >
           <Link
             to="/"
-            className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-blue-200 dark:shadow-none transition-all transform hover:scale-105"
+            className="inline-flex items-center space-x-2 bg-primary hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-blue-200 dark:shadow-none transition-all transform hover:scale-105"
           >
             <FaHome />
             <span>হোম পেজে ফিরে যান</span>
@@ -63,7 +61,7 @@ const Error = () => {
         </motion.div>
       </div>
     </div>
-    );
+  );
 };
 
 export default Error;

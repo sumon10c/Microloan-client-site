@@ -32,7 +32,7 @@ const Banner = () => {
               transition={{ delay: 0.6, duration: 0.8, type: "spring", stiffness: 100 }}
             >
               <Link to="/all-loans"> 
-                <button className="bg-primary hover:bg-blue-500 text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <button className="bg-primary hover:bg-blue-500 text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-2xl text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                   লোন খুঁজুন
                 </button>
               </Link>
