@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import usehook from "../../../Context/Hook/usehook";
+import SocialLogin from "../../../Context/Hook/SocialLogin/SocialLogin";
 
 const Register = () => {
   const { registerUser } = usehook();
@@ -103,7 +104,7 @@ const Register = () => {
                 Register
               </button>
             </form>
-
+            <SocialLogin></SocialLogin>
             <p className="text-center mt-4 text-sm">
               Already have an account?{" "}
               <a href="/login" className="link link-primary font-bold">

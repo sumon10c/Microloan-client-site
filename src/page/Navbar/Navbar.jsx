@@ -1,8 +1,17 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import Logo from '../../assets/logo.png'
+import usehook from "../../Context/Hook/usehook";
 
 const Navbar = () => {
+  const {user,logOut}=usehook()
+  const handleLogOut=()=>{
+    return logOut()
+    .then()
+    .catch(error=>{
+      console.log(error)
+    })
+  }
      const links = <>
      <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/'>Home</NavLink></li>
      <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/all-loans'>All Loans</NavLink></li>
@@ -45,8 +54,11 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <button className="btn bg-primary hover:bg-blue-500 font-semibold text-[16px] text-white mr-[5px]"><Link to='/login'>Login</Link></button>
-        <button className="btn bg-primary hover:bg-blue-500 font-semibold text-[16px] text-white"><Link to='/register'>Register</Link></button>
+       {
+        user?(<button onClick={handleLogOut} className="btn bg-primary hover:bg-blue-500 font-semibold text-[16px] text-white">LogOut</button>)
+        :  (<><button className="btn bg-primary hover:bg-blue-500 font-semibold text-[16px] text-white mr-[5px]"><Link to='/login'>Login</Link></button>
+        <button className="btn bg-primary hover:bg-blue-500 font-semibold text-[16px] text-white"><Link to='/register'>Register</Link></button></>)
+       }
       </div>
     </div>
   );
