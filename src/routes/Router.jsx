@@ -8,6 +8,7 @@ import Error from "../page/Error/Error";
 import Login from "../page/Navbar/Firebase/Login";
 import Register from "../page/Navbar/Firebase/Register";
 import CardDetails from "../page/All Loan/Loan-card/CardDetails";
+import AuthLayout from "../Authication/AuthLayout";
 
 export const router = createBrowserRouter([
     {
@@ -31,6 +32,17 @@ export const router = createBrowserRouter([
           path:'/contact',
           Component:Contact
         },
+        
+        {
+          path:'/cardDetails',
+          Component:CardDetails
+        }
+      ]
+    },
+    {
+      path:'/',
+      Component:AuthLayout,
+      children:[
         {
           path:'/login',
           Component: Login
@@ -39,11 +51,7 @@ export const router = createBrowserRouter([
           path:'/register',
           Component: Register
         },
-        {
-          path:'/cardDetails',
-          Component:CardDetails
-        }
       ]
-    },
+    }
   ]);
   
