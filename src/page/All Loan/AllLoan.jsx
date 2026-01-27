@@ -9,7 +9,7 @@ const AllLoan = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // আপনার ব্যাকএন্ড ইউআরএল দিন
+   
     // fetch("https://microloan-approval-tracker-server.vercel.app")
     fetch("http://localhost:3000/loans")
       .then((res) => res.json())

@@ -9,6 +9,7 @@ import Login from "../page/Navbar/Firebase/Login";
 import Register from "../page/Navbar/Firebase/Register";
 import CardDetails from "../page/All Loan/Loan-card/CardDetails";
 import AuthLayout from "../Authication/AuthLayout";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -35,7 +36,7 @@ export const router = createBrowserRouter([
         
         {
           path:'/cardDetails',
-          Component:CardDetails
+          element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>
         }
       ]
     },

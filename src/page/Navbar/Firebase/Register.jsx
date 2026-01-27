@@ -2,9 +2,15 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import usehook from "../../../Context/Hook/usehook";
 import SocialLogin from "../../../Context/Hook/SocialLogin/SocialLogin";
+import axios from "axios";
+import { Link, useLocation, useNavigate } from "react-router";
+
 
 const Register = () => {
   const { registerUser } = usehook();
+  const location = useLocation()
+  const navigate = useNavigate()
+  
   const {
     register,
     handleSubmit,
@@ -12,9 +18,24 @@ const Register = () => {
   } = useForm();
   const handleRegister = (data) => {
     // console.log(data)
+    const profilePhoto = data.photo[0]
+    const formData = new FormData();
+    formData.append('image',profilePhoto)
+   
+    const imgApi = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`
+
+
+    axios.post(imgApi,formData)
+    .then(res=>{
+      console.log('after post image',res.data)
+    })
     registerUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        navigate(location?.state || '/')
+
+
+
       })
       .catch((error) => {
         console.log("🔥 Firebase Error:", error.code, error.message);
@@ -43,13 +64,13 @@ const Register = () => {
                 <p className="text-red-500">Name is required</p>
               )}
 
-              {/* Photo URL Field */}
-              <label className="label">Photo URL</label>
+              {/* Photo Field */}
+              <label className="label">Photo </label>
               <input
-                type="text"
+                type="file"
                 {...register("photo", { required: true })}
-                className="input input-bordered w-full"
-                placeholder="https://image-link.com"
+                className="file-input input-bordered w-full"
+                placeholder="Your Photo"
               />
               {errors.photo?.type === "required" && (
                 <p className="text-red-500">Photo is required</p>
@@ -104,13 +125,9 @@ const Register = () => {
                 Register
               </button>
             </form>
+            <p className="text-sm">All ready have an account <span className="text-blue-600"><Link state={location.state} to='/login'>Login</Link></span></p>
             <SocialLogin></SocialLogin>
-            <p className="text-center mt-4 text-sm">
-              Already have an account?{" "}
-              <a href="/login" className="link link-primary font-bold">
-                Login
-              </a>
-            </p>
+           
           </div>
         </div>
       </div>
