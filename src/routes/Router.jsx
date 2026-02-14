@@ -39,9 +39,11 @@ export const router = createBrowserRouter([
           path:'/cardDetails/:id',
           element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>,
           loader: async ({ params }) => {
-            const res = await axios.get(`/loans/${params.id}`);
-            return res.data;
+            const response = await fetch(`http://localhost:3000/loans/${params.id}`);
+            if (!response.ok) throw new Error("Data not found");
+            return response.json();
           }
+        
         }
       ]
     },
