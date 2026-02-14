@@ -10,6 +10,7 @@ import Register from "../page/Navbar/Firebase/Register";
 import CardDetails from "../page/All Loan/Loan-card/CardDetails";
 import AuthLayout from "../Authication/AuthLayout";
 import PrivateRoute from "./PrivateRoute";
+import axios from "axios";
 
 export const router = createBrowserRouter([
     {
@@ -35,8 +36,12 @@ export const router = createBrowserRouter([
         },
         
         {
-          path:'/cardDetails',
-          element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>
+          path:'/cardDetails/:id',
+          element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>,
+          loader: async ({ params }) => {
+            const res = await axios.get(`/loans/${params.id}`);
+            return res.data;
+          }
         }
       ]
     },

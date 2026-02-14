@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router";
+import { data, Link } from "react-router";
 import { FaArrowRight, FaMoneyBillWave } from "react-icons/fa";
 import LoanCard from "./LoanCard";
+import Axios from "../../Context/Hook/useAxiousSucere/Axios";
 
 const AllLoan = () => {
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const axiosSecure = Axios();
 
   useEffect(() => {
-   
     // fetch("https://microloan-approval-tracker-server.vercel.app")
-    fetch("http://localhost:3000/loans")
-      .then((res) => res.json())
-      .then((data) => {
-        setLoans(data);
+    axiosSecure
+      .get("loans", data)
+      .then((res) => {
+        console.log(res.data);
+        setLoans(res.data);
         setLoading(false);
       })
+
       .catch((err) => console.error("Error fetching loans:", err));
   }, []);
 
@@ -30,9 +33,9 @@ const AllLoan = () => {
 
   return (
     <div className="px-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 max-w-[1200px] mx-auto my-5">
-      {
-        loans.map((loan)=><LoanCard key={loan._id} loan={loan}></LoanCard>)
-      }
+      {loans.map((loan) => (
+        <LoanCard key={loan._id} loan={loan}></LoanCard>
+      ))}
     </div>
   );
 };

@@ -2,7 +2,9 @@ import React from "react";
 import { Link } from "react-router";
 
 const LoanCard = ({ loan }) => {
+  console.log("Current Loan ID:", loan._id);
   const {
+    _id,
     image,
     title,
     description,
@@ -26,7 +28,7 @@ const LoanCard = ({ loan }) => {
           </div>
           <p>{description}</p>
           <div className="card-actions justify-end">
-           <Link to='/cardDetails'> <button className="btn btn-primary">বিস্তারিত দেখুন</button></Link>
+           <Link to={`/cardDetails/${_id}`}> <button className="btn btn-primary">বিস্তারিত দেখুন</button></Link>
           </div>
         </div>
       </div>
