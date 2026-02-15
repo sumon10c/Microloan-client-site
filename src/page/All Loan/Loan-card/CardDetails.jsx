@@ -1,5 +1,5 @@
 import React from "react";
-import { useLoaderData, useNavigate } from "react-router";
+import { Link, useLoaderData, useNavigate } from "react-router";
 
 const CardDetails = () => {
   const loan = useLoaderData();
@@ -13,6 +13,7 @@ const CardDetails = () => {
     max_loan_amount,
     interest_rate,
     category,
+    duration
   } = loan;
 
   return (
@@ -39,6 +40,9 @@ const CardDetails = () => {
             <p className="text-gray-600 text-lg leading-relaxed mb-8">
               {description}
             </p>
+            <p className="text-gray-600 text-lg leading-relaxed mb-8">
+            Duration : {duration}
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-8 mb-10 border-t border-b border-gray-200 py-8">
@@ -47,7 +51,7 @@ const CardDetails = () => {
                 Interest Rate
               </p>
               <p className="text-3xl font-black text-gray-800">
-                {interest_rate}%{" "}
+                {interest_rate}{" "}
                 <span className="text-sm font-normal text-gray-400">/Year</span>
               </p>
             </div>
@@ -62,26 +66,26 @@ const CardDetails = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={() => navigate(`/apply/${_id}`)}
-              className="flex-1  bg-primary hover:bg-blue-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-green-200 transform active:scale-95 flex items-center justify-center gap-3 text-lg"
+            <Link to={`/loanApplication/${_id}`}><button
+            // onClick={() => navigate(`/loanApplication/${_id}`)}
+            className="flex-1  bg-primary hover:bg-blue-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-green-200 transform active:scale-95 flex items-center justify-center gap-3 text-lg"
+          >
+            Apply Now
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              Apply Now
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </button></Link>
 
             <button
               onClick={() => navigate(-1)}

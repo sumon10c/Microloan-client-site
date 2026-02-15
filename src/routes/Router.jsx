@@ -11,6 +11,7 @@ import CardDetails from "../page/All Loan/Loan-card/CardDetails";
 import AuthLayout from "../Authication/AuthLayout";
 import PrivateRoute from "./PrivateRoute";
 import axios from "axios";
+import LoanApplicationForm from "../page/All Loan/LoanApplicationForm/LoanApplicationForm";
 
 export const router = createBrowserRouter([
     {
@@ -39,11 +40,15 @@ export const router = createBrowserRouter([
           path:'/cardDetails/:id',
           element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>,
           loader: async ({ params }) => {
-            const response = await fetch(`http://localhost:3000/loans/${params.id}`);
+            const response = await fetch(`https://microloan-approval-tracker-server.vercel.app/loans/${params.id}`);
             if (!response.ok) throw new Error("Data not found");
             return response.json();
           }
         
+        },
+        {
+          path:'/loanApplication/:id',
+          Component:LoanApplicationForm
         }
       ]
     },
