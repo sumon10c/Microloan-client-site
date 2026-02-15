@@ -1,142 +1,151 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Axios from "../../../Context/Hook/useAxiousSucere/Axios";
 import { useParams } from "react-router";
+import usehook from "../../../Context/Hook/usehook";
+import { AuthContex } from "../../../Context/AuthContex";
 
 const LoanApplicationForm = () => {
-  const { _id } = useParams();
-  const axiosSecure = Axios();
+  const { id } = useParams();
+
+  const { user } = usehook();
+  const axiosSecure = Axios(AuthContex);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user?.displayName,
+        Email: user?.email,
+      });
+    }
+  }, [user, reset]);
+
   const applicationSubmite = (data) => {
     const fullData = {
-      ...data, // ইউজারের পূরণ করা সব ইনপুট ডাটা
-      loanId: _id, // useParams() থেকে পাওয়া সেই নির্দিষ্ট লোনের ID
-      status: "Pending", // আপনি এখানে সরাসরি "Pending" লিখে দিচ্ছেন
-      appliedDate: new Date().toISOString(), // বর্তমান সময় ও তারিখ অটোমেটিক জেনারেট হচ্ছে
+      ...data,
+      loanId: id,
+      status: "Pending",
+      appliedDate: new Date().toISOString(),
     };
-    console.log("Database-এ যা যা যাচ্ছে:", fullData);
 
-    console.log("loan applicaan name:", data);
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
+      text: "আপনি কি আবেদনটি জমা দিতে চান?",
+      icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Submit it!",
+      confirmButtonText: "Yes, Submit!",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.post("/loansApplication", fullData).then((res) => {
-          console.log("after post", res.data);
           if (res.data.insertedId) {
-            Swal.fire("Success!", "আবেদনটি জমা হয়েছে!", "success");
-            reset(); // ফর্মটি খালি করার জন্য
+            Swal.fire("Success!", "আবেদনটি সফলভাবে জমা হয়েছে!", "success");
+            reset(); 
           }
         });
-
-        // Swal.fire({
-        //   title: "Deleted!",
-        //   text: "Your file has been deleted.",
-        //   icon: "success",
-        // });
       }
     });
   };
+
   return (
-    <div>
+    <div className="py-10">
+      <h2 className="text-3xl font-bold text-center mb-8 text-green-700">
+        Apply for Loan
+      </h2>
       <form
         onSubmit={handleSubmit(applicationSubmite)}
-        className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4"
+        className="max-w-[1000px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-10 shadow-xl rounded-2xl"
       >
-        {/* 1st collam */}
-        <div className="font-semibold ml-8">
-          <fieldset className="fieldset">
-            <label className="label">Name</label>
+        {/* Column 1 */}
+        <div className="space-y-4">
+          <div>
+            <label className="label font-bold">Name</label>
             <input
-              type="text"
               {...register("name")}
-              className="input"
-              placeholder="Name"
+              className="input input-bordered w-full"
+              readOnly
             />
-          </fieldset>
-          <fieldset className="fieldset">
-            <label className="label">Email</label>
+          </div>
+          <div>
+            <label className="label font-bold">Email</label>
             <input
-              type="Email"
               {...register("Email")}
-              className="input"
-              placeholder="Email"
+              className="input input-bordered w-full"
+              readOnly
             />
-          </fieldset>
-          <fieldset className="fieldset">
-            <label className="label">Phone Number</label>
+          </div>
+          <div>
+            <label className="label font-bold">Phone Number</label>
             <input
               type="number"
               {...register("Number")}
-              className="input"
-              placeholder="Phone Number"
+              className="input input-bordered w-full"
+              required
             />
-          </fieldset>
-          <fieldset className="fieldset">
-            <label className="label">NID Number</label>
+          </div>
+          <div>
+            <label className="label font-bold">NID Number</label>
             <input
               type="number"
               {...register("NID")}
-              className="input"
-              placeholder="NID Number"
+              className="input input-bordered w-full"
+              required
             />
-          </fieldset>
+          </div>
         </div>
-        {/* 2nd collam */}
-        <div className="font-semibold ml-8">
-          <fieldset className="fieldset">
-            <label className="label">Loan Amount</label>
+
+        {/* Column 2 */}
+        <div className="space-y-4">
+          <div>
+            <label className="label font-bold">Requested Amount</label>
             <input
               type="number"
               {...register("amount")}
-              className="input"
-              placeholder="Loan Amount"
+              className="input input-bordered w-full"
+              required
             />
-          </fieldset>
-          <fieldset className="fieldset">
-            <label className="label">Reason/Purpose</label>
+          </div>
+          <div>
+            <label className="label font-bold">Reason/Purpose</label>
             <input
               type="text"
               {...register("purpose")}
-              className="input"
-              placeholder="Reason/Purpose"
+              className="input input-bordered w-full"
+              required
             />
-          </fieldset>
-          <fieldset className="fieldset">
-            <label className="label">Duration</label>
+          </div>
+          <div>
+            <label className="label font-bold">Duration (Years/Months)</label>
             <input
               type="text"
               {...register("duration")}
-              className="input"
-              placeholder="Duration"
+              className="input input-bordered w-full"
+              required
             />
-          </fieldset>
-          <fieldset className="fieldset">
-            <label className="label">Current Address</label>
+          </div>
+          <div>
+            <label className="label font-bold">Current Address</label>
             <input
               type="text"
               {...register("Address")}
-              className="input"
-              placeholder="Current Address"
+              className="input input-bordered w-full"
+              required
             />
-          </fieldset>
+          </div>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
-          className="md:col-span-2 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition"
+          className="md:col-span-2 bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg mt-4"
         >
           Submit Application
         </button>
