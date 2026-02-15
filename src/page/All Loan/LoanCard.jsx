@@ -28,7 +28,12 @@ const LoanCard = ({ loan }) => {
           </div>
           <p>{description}</p>
           <div className="card-actions justify-end">
-           <Link to={`/cardDetails/${_id}`}> <button className="btn btn-primary">বিস্তারিত দেখুন</button></Link>
+            <Link to={`/cardDetails/${_id}`}>
+              {" "}
+              <button className="btn bg-primary hover:bg-blue-500 text-white">
+                বিস্তারিত দেখুন
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from "react-router";
+import LatestLoans from '../../latestLoan/LatestLoans';
 
 const Banner = () => {
     return (
@@ -39,6 +40,7 @@ const Banner = () => {
             </motion.div>
           </div>
         </div>
+       
       </div>
     );
 };

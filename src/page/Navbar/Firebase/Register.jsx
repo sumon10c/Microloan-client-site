@@ -5,12 +5,11 @@ import SocialLogin from "../../../Context/Hook/SocialLogin/SocialLogin";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router";
 
-
 const Register = () => {
   const { registerUser } = usehook();
-  const location = useLocation()
-  const navigate = useNavigate()
-  
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -18,24 +17,21 @@ const Register = () => {
   } = useForm();
   const handleRegister = (data) => {
     // console.log(data)
-    const profilePhoto = data.photo[0]
+    const profilePhoto = data.photo[0];
     const formData = new FormData();
-    formData.append('image',profilePhoto)
-   
-    const imgApi = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`
+    formData.append("image", profilePhoto);
 
+    const imgApi = `https://api.imgbb.com/1/upload?key=${
+      import.meta.env.VITE_image_host
+    }`;
 
-    axios.post(imgApi,formData)
-    .then(res=>{
-      console.log('after post image',res.data)
-    })
+    axios.post(imgApi, formData).then((res) => {
+      console.log("after post image", res.data);
+    });
     registerUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
-        navigate(location?.state || '/')
-
-
-
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         console.log("🔥 Firebase Error:", error.code, error.message);
@@ -125,9 +121,15 @@ const Register = () => {
                 Register
               </button>
             </form>
-            <p className="text-sm">All ready have an account <span className="text-blue-600"><Link state={location.state} to='/login'>Login</Link></span></p>
+            <p className="text-sm">
+              All ready have an account{" "}
+              <span className="text-blue-600">
+                <Link state={location.state} to="/login">
+                  Login
+                </Link>
+              </span>
+            </p>
             <SocialLogin></SocialLogin>
-           
           </div>
         </div>
       </div>

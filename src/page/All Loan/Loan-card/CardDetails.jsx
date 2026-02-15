@@ -64,7 +64,7 @@ const CardDetails = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => navigate(`/apply/${_id}`)}
-              className="flex-1 bg-gray-900 hover:bg-green-600 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-green-200 transform active:scale-95 flex items-center justify-center gap-3 text-lg"
+              className="flex-1  bg-primary hover:bg-blue-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-green-200 transform active:scale-95 flex items-center justify-center gap-3 text-lg"
             >
               Apply Now
               <svg
