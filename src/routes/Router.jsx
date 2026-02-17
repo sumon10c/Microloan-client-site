@@ -12,6 +12,8 @@ import AuthLayout from "../Authication/AuthLayout";
 import PrivateRoute from "./PrivateRoute";
 import axios from "axios";
 import LoanApplicationForm from "../page/All Loan/LoanApplicationForm/LoanApplicationForm";
+import DassBoard from "../layout/Dasboard/DassBoard";
+import MyLoans from "../layout/Dasboard/MyLoans";
 
 export const router = createBrowserRouter([
     {
@@ -64,6 +66,16 @@ export const router = createBrowserRouter([
           path:'/register',
           Component: Register
         },
+      ]
+    },
+    {
+      path:'dassBoard',
+      element:<PrivateRoute><DassBoard></DassBoard></PrivateRoute>,
+      children:[
+        {
+          path:'myLoans',
+          Component:MyLoans
+        }
       ]
     }
   ]);

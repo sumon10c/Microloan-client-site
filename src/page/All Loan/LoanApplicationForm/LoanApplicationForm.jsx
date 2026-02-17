@@ -72,7 +72,7 @@ const LoanApplicationForm = () => {
             <input
               {...register("name")}
               className="input input-bordered w-full"
-              readOnly
+              // readOnly
             />
           </div>
           <div>

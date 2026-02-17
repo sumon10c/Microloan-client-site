@@ -17,6 +17,11 @@ const Navbar = () => {
      <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/all-loans'>All Loans</NavLink></li>
      <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/about'>About Us</NavLink></li>
      <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/contact'>Contact</NavLink></li>
+     {
+      user && <>
+       <li className="font-semibold text-gray-600 text-[16px] hover:text-blue-400"><NavLink to='/dassBoard/myLoans'>My Loans</NavLink></li>
+      </>
+     }
      </>
   return (
     <div className="navbar bg-base-100 shadow-sm">
