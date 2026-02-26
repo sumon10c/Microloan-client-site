@@ -9,6 +9,7 @@ const MyLoans = () => {
 
     const {data:loansApplication = []} = useQuery({
         queryKey:['myLoans',user?.email],
+        enabled:!!user?.email,
         queryFn:async ()=>{
              const res = await axiosSecure.get(`/loansApplication?email=${user.email}`);
              console.log('aii jy data:',res.data)

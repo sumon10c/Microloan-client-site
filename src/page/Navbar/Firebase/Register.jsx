@@ -4,9 +4,10 @@ import usehook from "../../../Context/Hook/usehook";
 import SocialLogin from "../../../Context/Hook/SocialLogin/SocialLogin";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router";
+import Swal from "sweetalert2"; // SweetAlert ইম্পোর্ট করা হয়েছে
 
 const Register = () => {
-  const { registerUser } = usehook();
+  const { registerUser, loading } = usehook();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -15,123 +16,177 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleRegister = (data) => {
-    // console.log(data)
-    const profilePhoto = data.photo[0];
-    const formData = new FormData();
-    formData.append("image", profilePhoto);
 
-    const imgApi = `https://api.imgbb.com/1/upload?key=${
-      import.meta.env.VITE_image_host
-    }`;
+  const handleRegister = async (data) => {
+    try {
+      // 1️⃣ Image Upload
+      const profilePhoto = data.photo[0];
+      const formData = new FormData();
+      formData.append("image", profilePhoto);
 
-    axios.post(imgApi, formData).then((res) => {
-      console.log("after post image", res.data);
-    });
-    registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
-        navigate(location?.state || "/");
-      })
-      .catch((error) => {
-        console.log("🔥 Firebase Error:", error.code, error.message);
+      const imgApi = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_host
+      }`;
+
+      const res = await axios.post(imgApi, formData);
+      const photoURL = res.data.data.display_url;
+
+      // 2️⃣ Firebase Register
+      await registerUser(data.email, data.password, data.name, photoURL);
+
+      // Success Alert
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Registration Successful",
+        showConfirmButton: false,
+        timer: 1500,
       });
+
+      // 3️⃣ Redirect
+      navigate(location?.state || "/");
+    } catch (error) {
+      console.log("🔥 Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: error.message,
+      });
+    }
   };
 
   return (
-    <div className="hero bg-base-200 min-h-screen py-10">
-      <div className="hero-content flex-col lg:flex-row-reverse w-full">
-        <div className="card bg-base-100 w-full max-w-lg shrink-0 shadow-2xl">
-          <div className="card-body">
-            <h1 className="text-3xl font-bold text-center mb-4">
-              Register Now!
-            </h1>
-
-            <form onSubmit={handleSubmit(handleRegister)} className="fieldset">
-              {/* Name Field */}
-              <label className="label">Name</label>
-              <input
-                type="text"
-                {...register("name", { required: true })}
-                className="input input-bordered w-full"
-                placeholder="Your Name"
-              />
-              {errors.name?.type === "required" && (
-                <p className="text-red-500">Name is required</p>
-              )}
-
-              {/* Photo Field */}
-              <label className="label">Photo </label>
-              <input
-                type="file"
-                {...register("photo", { required: true })}
-                className="file-input input-bordered w-full"
-                placeholder="Your Photo"
-              />
-              {errors.photo?.type === "required" && (
-                <p className="text-red-500">Photo is required</p>
-              )}
-
-              {/* Email Field */}
-              <label className="label">Email</label>
-              <input
-                type="email"
-                {...register("email", { required: true })}
-                className="input input-bordered w-full"
-                placeholder="Email"
-              />
-              {errors.email?.type === "required" && (
-                <p className="text-red-500">Email is required</p>
-              )}
-
-              {/* Role Dropdown Field (রিকয়ারমেন্ট অনুযায়ী) */}
-              {/* <label className="label">Select Role</label>
-              <select
-                name="role"
-                className="select select-bordered w-full"
-                required
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Choose your role
-                </option>
-                <option value="borrower">Borrower</option>
-                <option value="manager">Manager</option>
-              </select> */}
-
-              {/* Password Field */}
-              <label className="label">Password</label>
-              <input
-                type="password"
-                {...register("password", { required: true, minLength: 6 })}
-                className="input input-bordered w-full"
-                placeholder="Password"
-              />
-              {errors.password?.type === "required" && (
-                <p className="text-red-500">password is required</p>
-              )}
-              {errors.password?.type === "minLength" && (
-                <p className="text-red-500">Must have 6+ chars</p>
-              )}
-              {/* <p className="text-[10px] text-gray-500 mt-1">
-                  , 1 uppercase, 1 lowercase.
-                </p> */}
-
-              <button className="btn btn-neutral mt-6 w-full text-white">
-                Register
-              </button>
-            </form>
-            <p className="text-sm">
-              All ready have an account{" "}
-              <span className="text-blue-600">
-                <Link state={location.state} to="/login">
-                  Login
-                </Link>
-              </span>
-            </p>
-            <SocialLogin></SocialLogin>
-          </div>
+    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4 py-10">
+      <div className="card bg-base-100 w-full max-w-md shadow-xl border border-gray-100">
+        <div className="p-8 text-center">
+          <h2 className="text-3xl font-bold text-primary">Create Account</h2>
+          <p className="text-gray-500 mt-2">
+            Join us to manage your microloans
+          </p>
         </div>
+
+        <form
+          onSubmit={handleSubmit(handleRegister)}
+          className="card-body pt-0"
+        >
+          {/* Name */}
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-semibold">Full Name</span>
+            </label>
+            <input
+              type="text"
+              {...register("name", { required: "Name is required" })}
+              className={`input input-bordered w-full ${
+                errors.name ? "border-red-500" : ""
+              }`}
+              placeholder="Enter your name"
+            />
+            {errors.name && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.name.message}
+              </span>
+            )}
+          </div>
+
+          {/* Photo */}
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-semibold">Profile Photo</span>
+            </label>
+            <input
+              type="file"
+              {...register("photo", { required: "Photo is required" })}
+              className={`file-input file-input-bordered w-full ${
+                errors.photo ? "border-red-500" : ""
+              }`}
+            />
+            {errors.photo && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.photo.message}
+              </span>
+            )}
+          </div>
+
+          {/* Email */}
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-semibold">Email Address</span>
+            </label>
+            <input
+              type="email"
+              {...register("email", { required: "Email is required" })}
+              className={`input input-bordered w-full ${
+                errors.email ? "border-red-500" : ""
+              }`}
+              placeholder="Enter your email"
+            />
+            {errors.email && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </span>
+            )}
+          </div>
+
+          {/* Password */}
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-semibold">Password</span>
+            </label>
+            <input
+              type="password"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Must be at least 6 characters",
+                },
+                pattern: {
+                  value: /(?=.*[a-z])(?=.*[A-Z])/,
+                  message: "Must include uppercase and lowercase",
+                },
+              })}
+              className={`input input-bordered w-full ${
+                errors.password ? "border-red-500" : ""
+              }`}
+              placeholder="Enter password"
+            />
+            {errors.password && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </span>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary w-full mt-6 text-white"
+          >
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Register"
+            )}
+          </button>
+
+          <div className="divider text-gray-400 text-xs mt-6">
+            OR REGISTER WITH
+          </div>
+
+          <SocialLogin />
+
+          <p className="text-center mt-6 text-sm">
+            Already have an account?
+            <Link
+              state={location.state}
+              to="/login"
+              className="text-primary font-bold ml-1 hover:underline"
+            >
+              Login here
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );

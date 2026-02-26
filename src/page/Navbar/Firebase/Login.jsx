@@ -3,60 +3,132 @@ import { useForm } from "react-hook-form";
 import usehook from "../../../Context/Hook/usehook";
 import SocialLogin from "../../../Context/Hook/SocialLogin/SocialLogin";
 import { Link, useLocation, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const Login = () => {
-  const { signInUser} = usehook();
-  const { register, handleSubmit } = useForm();
+  const { signInUser, loading } = usehook();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Email & Password Login
   const handleLogin = (data) => {
     signInUser(data.email, data.password)
       .then((result) => {
-        console.log("Login Success:", result.user);
-        navigate(location?.state || '/')
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Login Successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate(location?.state || "/");
       })
       .catch((error) => {
-        console.log(" Firebase Error:", error.code, error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Invalid Email or Password!",
+        });
       });
   };
 
-
-
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
-        <form onSubmit={handleSubmit(handleLogin)} className="card-body">
-          <fieldset className="fieldset space-y-2">
-            <label className="label">Email</label>
+    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4">
+      <div className="card bg-base-100 w-full max-w-md shadow-xl border border-gray-100">
+        <div className="p-8 text-center">
+          <h2 className="text-3xl font-bold text-primary">Welcome Back</h2>
+          <p className="text-gray-500 mt-2">Log in to manage your microloans</p>
+        </div>
+
+        <form onSubmit={handleSubmit(handleLogin)} className="card-body pt-0">
+          {/* Email Field */}
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-semibold">Email Address</span>
+            </label>
             <input
               type="email"
-              {...register("email", { required: true })}
-              className="input input-bordered"
-              placeholder="Email"
+              {...register("email", { required: "Email is required" })}
+              className={`input input-bordered w-full ${
+                errors.email ? "border-red-500" : ""
+              }`}
+              placeholder="Enter your email"
             />
+            {errors.email && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </span>
+            )}
+          </div>
 
-            <label className="label">Password</label>
+          {/* Password Field - Fixed Version */}
+          <div className="form-control w-full mt-2">
+            <label className="label">
+              <span className="label-text font-semibold">Password</span>
+            </label>
             <input
               type="password"
-              {...register("password", { required: true })}
-              className="input input-bordered"
-              placeholder="Password"
+              {...register("password", { required: "Password is required" })}
+              className={`input input-bordered w-full ${
+                errors.password ? "border-red-500" : ""
+              }`}
+              placeholder="Enter your password"
             />
+            {errors.password && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </span>
+            )}
+          </div>
 
-            <div className="">
-              <a className="link link-hover text-sm">Forgot password?</a>
-            </div>
-
-            <button type="submit" className="btn btn-neutral mt-3">
-              Login
+          <div className="flex justify-between items-center mt-4">
+            <label className="label cursor-pointer gap-2 p-0">
+              <input
+                type="checkbox"
+                className="checkbox checkbox-xs checkbox-primary"
+              />
+              <span className="label-text">Remember me</span>
+            </label>
+            <button
+              type="button"
+              className="text-primary hover:underline text-sm font-medium bg-transparent border-none"
+            >
+              Forgot password?
             </button>
-            <p className="text-sm">New To Loan Link <span className="text-blue-600"><Link state={location.state} to='/register'>Register</Link></span></p>
-            
-            <SocialLogin></SocialLogin>
+          </div>
 
-          </fieldset>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary w-full mt-6 text-white"
+          >
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Login"
+            )}
+          </button>
+
+          <div className="divider text-gray-400 text-xs mt-6">
+            OR LOGIN WITH
+          </div>
+
+          <SocialLogin />
+
+          <p className="text-center mt-6 text-sm">
+            Don't have an account?
+            <Link
+              state={location.state}
+              to="/register"
+              className="text-primary font-bold ml-1 hover:underline"
+            >
+              Register here
+            </Link>
+          </p>
         </form>
       </div>
     </div>
