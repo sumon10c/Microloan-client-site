@@ -14,6 +14,7 @@ import axios from "axios";
 import LoanApplicationForm from "../page/All Loan/LoanApplicationForm/LoanApplicationForm";
 import DassBoard from "../layout/Dasboard/DassBoard";
 import MyLoans from "../layout/Dasboard/MyLoans";
+import Blog from "../page/Blog/Blog";
 
 export const router = createBrowserRouter([
     {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
         {
           path:'/contact',
           Component:Contact
+        },
+        {
+           path:'/blog',
+           Component:Blog
         },
         
         {
