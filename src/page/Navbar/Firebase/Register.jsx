@@ -4,7 +4,7 @@ import usehook from "../../../Context/Hook/usehook";
 import SocialLogin from "../../../Context/Hook/SocialLogin/SocialLogin";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router";
-import Swal from "sweetalert2"; // SweetAlert ইম্পোর্ট করা হয়েছে
+import Swal from "sweetalert2"; 
 
 const Register = () => {
   const { registerUser, loading } = usehook();
@@ -19,7 +19,7 @@ const Register = () => {
 
   const handleRegister = async (data) => {
     try {
-      // 1️⃣ Image Upload
+      
       const profilePhoto = data.photo[0];
       const formData = new FormData();
       formData.append("image", profilePhoto);
@@ -31,7 +31,6 @@ const Register = () => {
       const res = await axios.post(imgApi, formData);
       const photoURL = res.data.data.display_url;
 
-      // 2️⃣ Firebase Register
       await registerUser(data.email, data.password, data.name, photoURL);
 
       // Success Alert
@@ -43,7 +42,7 @@ const Register = () => {
         timer: 1500,
       });
 
-      // 3️⃣ Redirect
+
       navigate(location?.state || "/");
     } catch (error) {
       console.log("🔥 Error:", error);
