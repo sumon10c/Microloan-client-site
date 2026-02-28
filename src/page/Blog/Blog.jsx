@@ -17,7 +17,7 @@ const Blog = () => {
       description:
         "বর্তমান অর্থনৈতিক পরিস্থিতিতে ক্ষুদ্র ঋণের আবেদন প্রক্রিয়া এখন আরও সহজ। জানুন আপনার প্রয়োজনীয় ডকুমেন্টস এবং প্রসেসিং সময় সম্পর্কে।",
       image:
-        "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=1200",
+        "https://i.ibb.co.com/hF2XQ2VC/immo-wegmann-4-EId-Xvmb1-V4-unsplash.jpg",
       date: "২৬ ফেব্রুয়ারি, ২০২৬",
       readTime: "৬ মিনিট",
       category: "Finance Guide",
@@ -30,7 +30,7 @@ const Blog = () => {
       description:
         "অনেক সময় ছোট ভুলের কারণে লোন অ্যাপ্লিকেশন বাতিল হয়ে যায়। এই ব্লগে আমরা আলোচনা করেছি কিভাবে রিজেকশন এড়িয়ে সাকসেসফুলি লোন পাওয়া যায়।",
       image:
-        "https://images.unsplash.com/photo-1573163231162-835263183d24?auto=format&fit=crop&q=80&w=800",
+        "https://i.ibb.co.com/t1BBxBf/muhammad-hazim-muhammuddin-EMRRyq-C6i-FQ-unsplash.jpg",
       date: "২৪ ফেব্রুয়ারি, ২০২৬",
       readTime: "৮ মিনিট",
       category: "Education",
