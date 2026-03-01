@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import usehook from "../../Context/Hook/usehook";
 import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
+import axios from "axios";
 import {
   FaEnvelope,
   FaSignOutAlt,
@@ -14,17 +15,42 @@ const MyProfile = () => {
   const { user, logOut, updateUserProfile } = usehook();
   const isAdmin = user?.email === "admin@gmail.com";
 
-  // Modal state
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+ 
+  const img_hosting_key = import.meta.env.VITE_image_host;
+  const img_hosting_api = `https://api.imgbb.com/1/upload?key=${img_hosting_key}`;
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    setUploading(true);
+
     const form = e.target;
     const name = form.name.value;
-    const photo = form.photo.value;
+    const imageFile = form.photo.files[0];
 
     try {
-      await updateUserProfile(name, photo);
+      let photoURL = user?.photoURL;
+
+     
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("image", imageFile);
+
+        const res = await axios.post(img_hosting_api, formData, {
+          headers: { "content-type": "multipart/form-data" },
+        });
+
+        if (res.data.success) {
+          photoURL = res.data.data.display_url;
+        }
+      }
+
+      
+      await updateUserProfile(name, photoURL);
+
       setIsEditModalOpen(false);
       Swal.fire({
         icon: "success",
@@ -34,6 +60,8 @@ const MyProfile = () => {
       });
     } catch (error) {
       Swal.fire("Error", "Update failed, try again!", "error");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -180,21 +208,24 @@ const MyProfile = () => {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
-                    Photo URL
+                    Profile Photo
                   </label>
                   <input
-                    type="text"
+                    type="file"
                     name="photo"
-                    defaultValue={user?.photoURL}
-                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-primary font-bold text-slate-700"
-                    required
+                    accept="image/*"
+                    className="file-input file-input-bordered w-full bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-500"
                   />
+                  <p className="text-[9px] text-slate-400 italic ml-2">
+                    Keep empty to remain unchanged
+                  </p>
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20 hover:bg-blue-700 transition-all mt-4"
+                  disabled={uploading}
+                  className="w-full py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20 hover:bg-blue-700 transition-all mt-4 disabled:bg-slate-300"
                 >
-                  Save Changes
+                  {uploading ? "Updating..." : "Save Changes"}
                 </button>
               </form>
             </motion.div>
