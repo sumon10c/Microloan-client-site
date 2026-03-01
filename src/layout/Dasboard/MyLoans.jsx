@@ -3,18 +3,15 @@ import React from "react";
 import usehook from "../../Context/Hook/usehook";
 import Axios from "../../Context/Hook/useAxiousSucere/Axios";
 import {
-  FaCalendarAlt,
-  FaMoneyBillWave,
-  FaClock,
   FaCheck,
   FaTimes,
+  FaTrashAlt,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const MyLoans = () => {
   const { user } = usehook();
   const axiosSecure = Axios();
-
 
   const {
     data: loansApplication = [],
@@ -44,11 +41,36 @@ const MyLoans = () => {
           timer: 1500,
           showConfirmButton: false,
         });
-        refetch(); 
+        refetch();
       }
     } catch (error) {
       Swal.fire("Error", "Something went wrong", "error");
     }
+  };
+
+// loan application detete function
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#EF4444",
+      cancelButtonColor: "#64748B",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await axiosSecure.delete(`/loansApplication/${id}`);
+          if (res.data.deletedCount > 0) {
+            Swal.fire("Deleted!", "Application has been removed.", "success");
+            refetch();
+          }
+        } catch (error) {
+          Swal.fire("Error", "Failed to delete the application.", "error");
+        }
+      }
+    });
   };
 
   if (isLoading) {
@@ -107,11 +129,10 @@ const MyLoans = () => {
                   <th className="py-5 px-6 text-[11px] font-black text-slate-400 uppercase tracking-widest border-none">
                     Status
                   </th>
-                  {isAdmin && (
-                    <th className="py-5 px-6 text-[11px] font-black text-slate-400 uppercase tracking-widest border-none text-center">
-                      Actions
-                    </th>
-                  )}
+                  
+                  <th className="py-5 px-6 text-[11px] font-black text-slate-400 uppercase tracking-widest border-none text-center">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
@@ -133,7 +154,7 @@ const MyLoans = () => {
                             </p>
                             <p className="text-[10px] text-slate-400 font-medium">
                               {isAdmin
-                                ? loan.Email
+                                ? loan.Email || loan.email
                                 : `ID: ${loan._id.slice(-8)}`}
                             </p>
                           </div>
@@ -170,39 +191,49 @@ const MyLoans = () => {
                         </span>
                       </td>
 
-                      {/*  Action Buttons for Admin */}
-                      {isAdmin && (
-                        <td className="py-5 px-6">
-                          <div className="flex justify-center gap-2">
-                            <button
-                              disabled={loan.status !== "Pending"}
-                              onClick={() =>
-                                handleStatusUpdate(loan._id, "Approved")
-                              }
-                              className="btn btn-sm btn-ghost text-green-600 bg-green-50 hover:bg-green-600 hover:text-white disabled:bg-slate-100"
-                            >
-                              <FaCheck />
-                            </button>
-                            <button
-                              disabled={loan.status !== "Pending"}
-                              onClick={() =>
-                                handleStatusUpdate(loan._id, "Rejected")
-                              }
-                              className="btn btn-sm btn-ghost text-red-600 bg-red-50 hover:bg-red-600 hover:text-white disabled:bg-slate-100"
-                            >
-                              <FaTimes />
-                            </button>
-                          </div>
-                        </td>
-                      )}
+                      <td className="py-5 px-6">
+                        <div className="flex justify-center gap-2">
+                         
+                          {isAdmin && (
+                            <>
+                              <button
+                                disabled={loan.status !== "Pending"}
+                                onClick={() =>
+                                  handleStatusUpdate(loan._id, "Approved")
+                                }
+                                title="Approve Loan"
+                                className="btn btn-sm btn-ghost text-green-600 bg-green-50 hover:bg-green-600 hover:text-white disabled:bg-slate-100"
+                              >
+                                <FaCheck />
+                              </button>
+                              <button
+                                disabled={loan.status !== "Pending"}
+                                onClick={() =>
+                                  handleStatusUpdate(loan._id, "Rejected")
+                                }
+                                title="Reject Loan"
+                                className="btn btn-sm btn-ghost text-red-600 bg-red-50 hover:bg-red-600 hover:text-white disabled:bg-slate-100"
+                              >
+                                <FaTimes />
+                              </button>
+                            </>
+                          )}
+
+                          {/*  Delete Button (Admin & User both) */}
+                          <button
+                            onClick={() => handleDelete(loan._id)}
+                            title="Delete Application"
+                            className="btn btn-sm btn-ghost text-slate-400 bg-slate-100 hover:bg-red-500 hover:text-white"
+                          >
+                            <FaTrashAlt />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td
-                      colSpan={isAdmin ? "6" : "5"}
-                      className="py-20 text-center"
-                    >
+                    <td colSpan="6" className="py-20 text-center">
                       <p className="text-slate-400 font-bold">
                         No Loan Applications Found
                       </p>
