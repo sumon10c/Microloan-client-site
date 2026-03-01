@@ -14,46 +14,53 @@ const LoanCard = ({ loan }) => {
   } = loan;
 
   return (
-    <div className="group h-full">
-      <div className="card bg-base-100 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col overflow-hidden">
+    <div className="group h-full transition-all duration-300">
+      <div className="card bg-base-100 border border-base-300 shadow-sm hover:shadow-xl hover:border-primary/30 transition-all duration-500 h-full flex flex-col overflow-hidden">
         {/* Image Section with Overlay */}
-        <figure className="relative h-48 overflow-hidden">
-          <img 
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-            src={image} 
-            alt={title} 
+        <figure className="relative h-52 overflow-hidden bg-base-300">
+          <img
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            src={image}
+            alt={title}
+            loading="lazy"
           />
-          <div className="absolute top-4 left-4">
-            <span className="badge badge-primary font-bold py-3 shadow-md">{category}</span>
+          <div className="absolute top-4 left-4 z-10">
+            <span className="badge badge-primary font-black py-3 px-4 shadow-lg uppercase text-[10px] tracking-widest border-none">
+              {category}
+            </span>
           </div>
+          {/* Overlay gradient for better text contrast if needed */}
+          <div className="absolute inset-0 bg-gradient-to-t from-base-900/20 to-transparent"></div>
         </figure>
 
         {/* Content Section */}
-        <div className="card-body p-6 flex flex-col flex-grow">
-          <h2 className="card-title text-xl font-bold text-gray-800 line-clamp-1">
+        <div className="card-body p-6 flex flex-col flex-grow text-base-content">
+          <h2 className="card-title text-xl font-black mb-1 line-clamp-1 group-hover:text-primary transition-colors">
             {title}
           </h2>
-          
-          <div className="flex items-center gap-4 my-3 text-sm font-medium">
-            <div className="flex items-center gap-1 text-blue-600 bg-blue-50 px-2 py-1 rounded">
-              <FaDollarSign className="text-xs" />
+
+          <div className="flex flex-wrap items-center gap-3 my-4">
+            {/* Amount Tag */}
+            <div className="flex items-center gap-1.5 text-primary bg-primary/10 px-3 py-1.5 rounded-xl text-xs font-black border border-primary/10">
+              <FaDollarSign className="text-[10px]" />
               <span>Max: {max_loan_amount}</span>
             </div>
-            <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded">
-              <FaPercentage className="text-xs" />
+            {/* Rate Tag */}
+            <div className="flex items-center gap-1.5 text-success bg-success/10 px-3 py-1.5 rounded-xl text-xs font-black border border-success/10">
+              <FaPercentage className="text-[10px]" />
               <span>Rate: {interest_rate}%</span>
             </div>
           </div>
 
-          <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+          <p className="opacity-70 text-sm mb-6 line-clamp-3 leading-relaxed font-medium">
             {description}
           </p>
 
-          <div className="card-actions justify-end mt-auto pt-4 border-t border-gray-50">
+          <div className="card-actions justify-end mt-auto pt-5 border-t border-base-200">
             <Link to={`/cardDetails/${_id}`} className="w-full">
-              <button className="btn btn-primary w-full text-white font-bold gap-2 group">
+              <button className="btn btn-primary w-full text-primary-content font-black uppercase tracking-widest text-xs gap-3 group/btn shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
                 বিস্তারিত দেখুন
-                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                <FaArrowRight className="group-hover/btn:translate-x-1.5 transition-transform" />
               </button>
             </Link>
           </div>

@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import usehook from "../../Context/Hook/usehook";
 import { Link, NavLink } from "react-router";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logOut } = usehook();
+
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
+  );
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    const localTheme = localStorage.getItem("theme");
+    document.querySelector("html").setAttribute("data-theme", localTheme);
+  }, [theme]);
+
+  const handleToggle = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   const handleLogOut = () => {
     logOut()
@@ -31,9 +45,9 @@ const Navbar = () => {
       {user && (
         <>
           <li>
-          <NavLink to='/dassBoard/myLoans'>
-          {isAdmin ? "All Applications" : "My Loans"}
-          </NavLink>
+            <NavLink to="/dassBoard/myLoans">
+              {isAdmin ? "All Applications" : "My Loans"}
+            </NavLink>
           </li>
           <li>
             <NavLink to="/blog">Blog</NavLink>
@@ -44,8 +58,7 @@ const Navbar = () => {
   );
 
   return (
-
-    <div className="navbar bg-base-100 shadow-md sticky top-0 z-50 px-4 md:px-8">
+    <div className="navbar bg-base-100 shadow-md sticky top-0 z-50 px-4 md:px-8 transition-colors duration-300">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -75,7 +88,6 @@ const Navbar = () => {
           to="/"
           className="font-bold text-2xl md:text-3xl text-primary flex items-center gap-2"
         >
-         
           <span>LoanLink</span>
         </Link>
       </div>
@@ -87,14 +99,18 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-end gap-3">
-       
-        <button className="btn btn-ghost btn-circle">
-         
-          <FaMoon />
+        <button
+          onClick={handleToggle}
+          className="btn btn-ghost btn-circle text-lg"
+        >
+          {theme === "light" ? (
+            <FaMoon />
+          ) : (
+            <FaSun className="text-yellow-400" />
+          )}
         </button>
 
         {user ? (
-          
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -116,7 +132,7 @@ const Navbar = () => {
                 {user?.displayName || "User"}
               </li>
               <li>
-                <Link to='/dassBoard/myProfile'>Profile Settings</Link>
+                <Link to="/dassBoard/myProfile">Profile Settings</Link>
               </li>
               <li>
                 <button onClick={handleLogOut} className="text-red-500">

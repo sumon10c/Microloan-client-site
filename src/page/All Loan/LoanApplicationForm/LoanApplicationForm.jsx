@@ -23,7 +23,7 @@ const LoanApplicationForm = () => {
     formState: { errors },
   } = useForm();
 
-  // Pre-fill user data from Auth
+  // Pre-fill user data
   useEffect(() => {
     if (user) {
       reset({
@@ -43,13 +43,14 @@ const LoanApplicationForm = () => {
 
     const result = await Swal.fire({
       title: "Confirm Application?",
-      text: "Are you sure all the information provided is correct?",
+      text: "সব তথ্য কি সঠিক? সাবমিট করার পর পরিবর্তন করা যাবে না।",
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#2563eb",
-      cancelButtonColor: "#ef4444",
+      confirmButtonColor: "var(--p)", // DaisyUI Primary Color
+      cancelButtonColor: "var(--er)", // DaisyUI Error Color
       confirmButtonText: "Yes, Submit Now",
-      cancelButtonText: "Cancel",
+      background: "var(--b1)",
+      color: "var(--bc)",
     });
 
     if (result.isConfirmed) {
@@ -60,14 +61,21 @@ const LoanApplicationForm = () => {
           Swal.fire({
             icon: "success",
             title: "Success!",
-            text: "Your application has been submitted successfully.",
-            timer: 3000,
+            text: "আবেদনটি সফলভাবে জমা হয়েছে।",
+            background: "var(--b1)",
+            color: "var(--bc)",
           });
           reset();
           navigate("/dassBoard/myLoans");
         }
       } catch (error) {
-        Swal.fire("Error", "Something went wrong. Please try again.", "error");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "কিছু ভুল হয়েছে, আবার চেষ্টা করুন।",
+          background: "var(--b1)",
+          color: "var(--bc)",
+        });
       } finally {
         setLoading(false);
       }
@@ -75,122 +83,122 @@ const LoanApplicationForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-16 px-4">
+    <div className="min-h-screen bg-base-200 py-16 px-4 text-base-content transition-colors duration-300">
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-black text-slate-900 mb-3">
+          <h2 className="text-4xl font-black mb-3 tracking-tight">
             Loan Application Form
           </h2>
-          <p className="text-slate-500 font-medium tracking-tight">
-            Please provide accurate information to process your request.
+          <p className="opacity-60 font-medium italic">
+            সঠিক তথ্য প্রদান করে আপনার ঋণের আবেদন সম্পন্ন করুন।
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+        <div className="bg-base-100 rounded-3xl shadow-2xl overflow-hidden border border-base-300">
           {/* Form Top Banner */}
-          <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
+          <div className="bg-neutral p-6 flex items-center justify-between text-neutral-content">
             <div className="flex items-center gap-3">
-              <FaShieldAlt className="text-xl text-blue-400" />
-              <span className="text-sm font-bold tracking-widest uppercase">
+              <FaShieldAlt className="text-xl text-primary" />
+              <span className="text-sm font-black tracking-widest uppercase">
                 Secure Portal
               </span>
             </div>
-            <span className="text-xs bg-white/10 px-3 py-1 rounded-full font-mono">
+            <span className="text-xs bg-white/10 px-4 py-1.5 rounded-full font-mono border border-white/5">
               LOAN-ID: {id?.slice(-8).toUpperCase()}
             </span>
           </div>
 
           <form
             onSubmit={handleSubmit(applicationSubmite)}
-            className="p-8 md:p-12"
+            className="p-8 md:p-12 space-y-10"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               {/* Personal Information */}
               <div className="space-y-6">
-                <h3 className="text-lg font-bold text-slate-800 border-b pb-2 tracking-tight">
-                  Personal Information
+                <h3 className="text-lg font-black border-l-4 border-primary pl-3 uppercase tracking-wider">
+                  Personal Info
                 </h3>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     Full Name
                   </label>
                   <input
                     {...register("name", { required: "Name is required" })}
-                    className={`input input-bordered w-full bg-slate-50 focus:ring-2 focus:ring-blue-500/20 ${
-                      errors.name ? "border-red-500" : "border-slate-200"
+                    className={`input input-bordered w-full bg-base-200 font-bold ${
+                      errors.name ? "border-error" : ""
                     }`}
-                    placeholder="Enter your name"
+                    placeholder="John Doe"
                   />
+                  {errors.name && (
+                    <span className="text-error text-[10px] mt-1 font-bold">
+                      {errors.name.message}
+                    </span>
+                  )}
                 </div>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     Email Address
                   </label>
                   <input
                     {...register("Email")}
                     readOnly
-                    className="input input-bordered w-full bg-slate-100 text-slate-400 cursor-not-allowed border-slate-200"
+                    className="input input-bordered w-full bg-base-300 opacity-60 cursor-not-allowed italic font-bold"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     Phone Number
                   </label>
                   <input
                     type="tel"
-                    {...register("Number", {
-                      required: "Phone number is required",
-                    })}
+                    {...register("Number", { required: "Required" })}
                     placeholder="01XXXXXXXXX"
-                    className="input input-bordered w-full bg-slate-50 border-slate-200"
+                    className="input input-bordered w-full bg-base-200 font-bold"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     NID Number
                   </label>
                   <input
                     type="number"
-                    {...register("NID", { required: "NID is required" })}
-                    placeholder="National ID Number"
-                    className="input input-bordered w-full bg-slate-50 border-slate-200"
+                    {...register("NID", { required: "Required" })}
+                    placeholder="National ID"
+                    className="input input-bordered w-full bg-base-200 font-bold"
                   />
                 </div>
               </div>
 
               {/* Loan Details */}
               <div className="space-y-6">
-                <h3 className="text-lg font-bold text-slate-800 border-b pb-2 tracking-tight">
-                  Loan Request Details
+                <h3 className="text-lg font-black border-l-4 border-secondary pl-3 uppercase tracking-wider">
+                  Loan Details
                 </h3>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     Requested Amount
                   </label>
                   <input
                     type="number"
-                    {...register("amount", {
-                      required: "Amount is required",
-                      min: 500,
-                    })}
+                    {...register("amount", { required: true, min: 500 })}
                     placeholder="e.g. 50000"
-                    className="input input-bordered w-full bg-slate-50 border-slate-200 font-bold text-blue-600"
+                    className="input input-bordered w-full bg-base-200 font-black text-primary"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     Loan Purpose
                   </label>
                   <select
-                    {...register("purpose", { required: "Select a purpose" })}
-                    className="select select-bordered w-full bg-slate-50 border-slate-200"
+                    {...register("purpose", { required: true })}
+                    className="select select-bordered w-full bg-base-200 font-bold"
                   >
                     <option value="">Select Purpose</option>
                     <option value="Business">Business Expansion</option>
@@ -200,29 +208,24 @@ const LoanApplicationForm = () => {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     Duration (Months)
                   </label>
                   <input
-                    type="text"
-                    {...register("duration", {
-                      required: "Duration is required",
-                    })}
-                    placeholder="e.g. 12 Months"
-                    className="input input-bordered w-full bg-slate-50 border-slate-200"
+                    {...register("duration", { required: true })}
+                    placeholder="e.g. 12"
+                    className="input input-bordered w-full bg-base-200 font-bold"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase mb-2">
+                <div className="form-control">
+                  <label className="label uppercase text-[10px] font-black opacity-50">
                     Current Address
                   </label>
                   <textarea
-                    {...register("Address", {
-                      required: "Address is required",
-                    })}
-                    className="textarea textarea-bordered w-full h-20 bg-slate-50 border-slate-200"
+                    {...register("Address", { required: true })}
+                    className="textarea textarea-bordered w-full h-20 bg-base-200 font-bold leading-tight"
                     placeholder="Full living address"
                   ></textarea>
                 </div>
@@ -230,34 +233,32 @@ const LoanApplicationForm = () => {
             </div>
 
             {/* Privacy Note */}
-            <div className="mt-10 p-4 bg-slate-50 rounded-2xl border border-slate-100 flex gap-3">
+            <div className="p-5 bg-base-200 rounded-2xl border border-base-300 flex gap-4 items-start group">
               <input
                 type="checkbox"
                 required
-                className="checkbox checkbox-primary checkbox-sm mt-1"
+                className="checkbox checkbox-primary checkbox-sm mt-1 border-2"
               />
-              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+              <p className="text-[11px] opacity-60 leading-relaxed font-bold">
                 I hereby declare that the information provided is true and
-                accurate. I agree to the <strong>Terms of Service</strong> and{" "}
-                <strong>Privacy Policy</strong>.
+                accurate. I agree to the{" "}
+                <span className="text-primary">Terms of Service</span> and
+                <span className="text-primary"> Privacy Policy</span>.
               </p>
             </div>
 
             {/* Action Button */}
             <button
               type="submit"
-             
               disabled={loading || isAdmin}
-              className={`w-full mt-8 py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 shadow-lg ${
-                loading || isAdmin
-                  ? "bg-slate-300 cursor-not-allowed text-slate-500" 
-                  : "bg-blue-600 hover:bg-blue-700 text-white active:scale-[0.98]"
+              className={`btn btn-block py-4 h-auto rounded-2xl font-black text-lg shadow-xl shadow-primary/20 ${
+                isAdmin ? "btn-disabled" : "btn-primary"
               }`}
             >
               {loading ? (
-                <span className="loading loading-spinner loading-md"></span>
+                <span className="loading loading-spinner"></span>
               ) : isAdmin ? (
-                "Admin Cannot Apply" 
+                "ADMIN ACCOUNT RESTRICTED"
               ) : (
                 <>
                   Submit Application <FaPaperPlane className="text-sm" />
@@ -268,14 +269,14 @@ const LoanApplicationForm = () => {
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-slate-400">
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-4 opacity-40">
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em]">
             <FaInfoCircle /> 24/7 Support
           </div>
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em]">
             <FaShieldAlt /> SSL Encrypted
           </div>
-          <div className="text-[11px] font-bold uppercase tracking-widest italic">
+          <div className="text-[10px] font-black uppercase tracking-[0.2em] italic">
             Nemesis Verified System
           </div>
         </div>

@@ -22,14 +22,17 @@ const Contact = () => {
 
     Swal.fire({
       title: "Success!",
-      text: "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।",
+      text: "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।",
       icon: "success",
-      confirmButtonColor: "#2563eb",
+      confirmButtonColor: "var(--color-primary)",
+      background: "var(--color-base-100)",
+      color: "var(--color-base-content)",
     });
     reset();
   };
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 py-16 px-6">
+    <div className="min-h-screen bg-base-200 text-base-content py-16 px-6 transition-colors duration-300">
       <div className="container mx-auto max-w-6xl">
         {/* Header Section */}
         <motion.div
@@ -37,128 +40,149 @@ const Contact = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl font-bold text-slate-800 dark:text-white mb-4">
-            আমাদের সাথে যোগাযোগ করুন
+          <h1 className="text-4xl md:text-5xl font-black mb-4">
+            আমাদের সাথে <span className="text-primary">যোগাযোগ</span> করুন
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
-            লোন সংক্রান্ত যেকোনো প্রয়োজনে আমাদের বিশেষজ্ঞ টিম আপনার পাশে আছে।
+          <p className="opacity-70 max-w-lg mx-auto leading-relaxed">
+            লোন সংক্রান্ত যেকোনো প্রয়োজনে আমাদের বিশেষজ্ঞ টিম আপনার পাশে আছে।
+            আমরা দ্রুত আপনার প্রশ্নের উত্তর দিতে প্রতিশ্রুতিবদ্ধ।
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-10">
           {/* Contact Info Cards */}
           <div className="space-y-6">
-            <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center space-x-4">
-              <div className="p-4 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-full">
-                <FaPhoneAlt />
+            {[
+              {
+                icon: <FaPhoneAlt />,
+                label: "ফোন করুন",
+                val: "+880 1234 567890",
+                color: "bg-blue-500/10 text-blue-500",
+              },
+              {
+                icon: <FaEnvelope />,
+                label: "ইমেইল",
+                val: "support@loanlink.com",
+                color: "bg-emerald-500/10 text-emerald-500",
+              },
+              {
+                icon: <FaMapMarkerAlt />,
+                label: "অফিস",
+                val: "সেক্টর ৭, উত্তরা, ঢাকা",
+                color: "bg-purple-500/10 text-purple-500",
+              },
+            ].map((info, index) => (
+              <div
+                key={index}
+                className="p-6 bg-base-100 rounded-3xl shadow-sm border border-base-300 flex items-center space-x-5 hover:shadow-md transition-shadow"
+              >
+                <div className={`p-4 ${info.color} rounded-2xl text-xl`}>
+                  {info.icon}
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg">{info.label}</h4>
+                  <p className="text-sm opacity-60 font-medium">{info.val}</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-slate-800 dark:text-white">
-                  ফোন করুন
-                </h4>
-                <p className="text-sm text-slate-500">+880 1234 567890</p>
-              </div>
-            </div>
-
-            <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center space-x-4">
-              <div className="p-4 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full">
-                <FaEnvelope />
-              </div>
-              <div>
-                <h4 className="font-semibold text-slate-800 dark:text-white">
-                  ইমেইল
-                </h4>
-                <p className="text-sm text-slate-500">support@loanlink.com</p>
-              </div>
-            </div>
-
-            <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center space-x-4">
-              <div className="p-4 bg-purple-100 dark:bg-purple-900/30 text-purple-600 rounded-full">
-                <FaMapMarkerAlt />
-              </div>
-              <div>
-                <h4 className="font-semibold text-slate-800 dark:text-white">
-                  অফিস
-                </h4>
-                <p className="text-sm text-slate-500">সেক্টর ৭, উত্তরা, ঢাকা</p>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="md:col-span-2 bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-700"
+            className="md:col-span-2 bg-base-100 p-8 md:p-10 rounded-[2.5rem] shadow-xl border border-base-300"
           >
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  আপনার নাম
+              {/* Name Input */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-bold">আপনার নাম</span>
                 </label>
                 <input
                   {...register("name", { required: "নাম প্রদান করা আবশ্যিক" })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 text-white bg-transparent focus:ring-2 focus:ring-blue-500 outline-none transition text-white "
-                  placeholder="নাম প্রদান করা আবশ্যিক"
+                  className={`input input-bordered w-full rounded-xl bg-base-200 focus:input-primary transition-all ${
+                    errors.name ? "input-error" : ""
+                  }`}
+                  placeholder="আপনার পূর্ণ নাম লিখুন"
                 />
                 {errors.name && (
-                  <span className="text-red-500 text-xs mt-1">
+                  <span className="text-error text-xs mt-1 font-medium">
                     {errors.name.message}
                   </span>
                 )}
               </div>
 
-              <div>
-                <label className="block text-white  text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  ইমেইল এড্রেস
+              {/* Email Input */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-bold">ইমেইল এড্রেস</span>
                 </label>
                 <input
                   {...register("email", {
-                    required: "ইমেইল প্রয়োজন",
+                    required: "ইমেইল প্রয়োজন",
                     pattern: { value: /^\S+@\S+$/i, message: "সঠিক ইমেইল দিন" },
                   })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-transparent focus:ring-2 focus:ring-blue-500 outline-none transition text-white "
-                  placeholder="সঠিক ইমেইল দিন"
+                  className={`input input-bordered w-full rounded-xl bg-base-200 focus:input-primary transition-all ${
+                    errors.email ? "input-error" : ""
+                  }`}
+                  placeholder="example@mail.com"
                 />
                 {errors.email && (
-                  <span className="text-red-500 text-xs mt-1">
+                  <span className="text-error text-xs mt-1 font-medium">
                     {errors.email.message}
                   </span>
                 )}
               </div>
 
-              <div className="md:col-span-2 text-white ">
-                <label className="block text-sm font-medium  text-slate-700 dark:text-slate-300 mb-2">
-                  বিষয়
+              {/* Subject Input */}
+              <div className="md:col-span-2 form-control">
+                <label className="label">
+                  <span className="label-text font-bold">বিষয়</span>
                 </label>
                 <input
-                  {...register("subject", { required: "বিষয় উল্লেখ করুন" })}
-                  className="w-full  px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-transparent focus:ring-2 focus:ring-blue-500 outline-none transition text-white "
-                  placeholder="লোন অনুমোদন বিষয়ক"
+                  {...register("subject", { required: "বিষয় উল্লেখ করুন" })}
+                  className={`input input-bordered w-full rounded-xl bg-base-200 focus:input-primary transition-all ${
+                    errors.subject ? "input-error" : ""
+                  }`}
+                  placeholder="যেমন: লোন অনুমোদন বিষয়ক"
                 />
+                {errors.subject && (
+                  <span className="text-error text-xs mt-1 font-medium">
+                    {errors.subject.message}
+                  </span>
+                )}
               </div>
 
-              <div className="md:col-span-2 ">
-                <label className="text-white  block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  আপনার মেসেজ
+              {/* Message Input */}
+              <div className="md:col-span-2 form-control">
+                <label className="label">
+                  <span className="label-text font-bold">আপনার মেসেজ</span>
                 </label>
                 <textarea
                   {...register("message", { required: "মেসেজ লিখুন" })}
                   rows="4"
-                  className="w-full text-white  px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-transparent focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  className={`textarea textarea-bordered w-full rounded-xl bg-base-200 focus:textarea-primary transition-all h-32 ${
+                    errors.message ? "textarea-error" : ""
+                  }`}
                   placeholder="আপনার সমস্যা বা প্রশ্ন বিস্তারিত লিখুন..."
                 ></textarea>
+                {errors.message && (
+                  <span className="text-error text-xs mt-1 font-medium">
+                    {errors.message.message}
+                  </span>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="md:col-span-2 w-full bg-primary hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-200 dark:shadow-none"
+                className="md:col-span-2 btn btn-primary btn-lg rounded-2xl w-full normal-case text-lg shadow-lg shadow-primary/20 flex items-center gap-3 mt-4"
               >
                 <span>মেসেজ পাঠান</span>
-                <FaPaperPlane />
+                <FaPaperPlane className="text-sm" />
               </button>
             </form>
           </motion.div>
