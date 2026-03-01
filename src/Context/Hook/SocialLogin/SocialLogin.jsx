@@ -1,27 +1,49 @@
 import React from "react";
 import usehook from "../usehook";
 import { useLocation, useNavigate } from "react-router";
+import Axios from "../../../Context/Hook/useAxiousSucere/Axios";
 
 const SocialLogin = () => {
-    const {googleSignIn}=usehook()
-    const location = useLocation()
-    const navigate = useNavigate()
-    const handleGoogelSingIn =()=>{
-       googleSignIn()
-       .then(result=>{
-        console.log(result.user)
-        navigate(location?.state || '/')
-       })
-       .catch(error=>{
-        console.log(error)
-       })
-    }
+  const { googleSignIn } = usehook();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const axiosSecure = Axios();
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then(async (result) => {
+        const user = result.user;
+        // console.log(" Google User:", user);
+
+        const userInfo = {
+          name: user?.displayName,
+          Email: user?.email,
+          photo: user?.photoURL,
+          role: "User",
+          createdAt: new Date().toISOString(),
+        };
+
+        try {
+          const res = await axiosSecure.put("/users", userInfo);
+          console.log(" Social Login User Saved:", res.data);
+
+          navigate(location?.state || "/");
+        } catch (err) {
+          console.error(" DB Save Error in Social Login:", err);
+        }
+      })
+      .catch((error) => {
+        console.log(" Google Sign-In Error:", error);
+      });
+  };
+
   return (
     <div className="text-center">
       <p className="p-1 font-bold">Or</p>
       <button
-      onClick={handleGoogelSingIn}
-      className="btn w-full bg-white text-black border-[#e5e5e5]">
+        onClick={handleGoogleSignIn}
+        className="btn w-full bg-white text-black border-[#e5e5e5]"
+      >
         <svg
           aria-label="Google logo"
           width="16"
