@@ -17,6 +17,24 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ১. প্রোফাইল আপডেট করার নতুন ফাংশন (এটি Edit Profile এর জন্য লাগবে)
+  const updateUserProfile = async (name, photo) => {
+    setLoading(true);
+    try {
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: photo,
+      });
+
+      // প্রোফাইল আপডেট হওয়ার পর স্টেট আপডেট করা যাতে রিফ্রেশ ছাড়াই নাম পরিবর্তন দেখা যায়
+      setUser({ ...auth.currentUser, displayName: name, photoURL: photo });
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const registerUser = async (email, password, name, photoURL) => {
     setLoading(true);
     try {
@@ -26,13 +44,11 @@ const AuthProvider = ({ children }) => {
         password
       );
 
-    
       await updateProfile(result.user, {
         displayName: name,
         photoURL: photoURL,
       });
 
-      
       setUser({
         ...result.user,
         displayName: name,
@@ -62,7 +78,6 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -81,13 +96,10 @@ const AuthProvider = ({ children }) => {
     signInUser,
     googleSignIn,
     logOut,
+    updateUserProfile, // ২. এটি এক্সপোর্ট করতে ভুলবেন না
   };
 
-  return (
-    <AuthContex.Provider value={authInfo}>
-      {children}
-    </AuthContex.Provider>
-  );
+  return <AuthContex.Provider value={authInfo}>{children}</AuthContex.Provider>;
 };
 
 export default AuthProvider;
