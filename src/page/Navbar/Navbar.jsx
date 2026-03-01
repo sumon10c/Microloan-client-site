@@ -116,7 +116,7 @@ const Navbar = () => {
                 {user?.displayName || "User"}
               </li>
               <li>
-                <Link to="/dashboard/profile">Profile Settings</Link>
+                <Link to='/dassBoard/myProfile'>Profile Settings</Link>
               </li>
               <li>
                 <button onClick={handleLogOut} className="text-red-500">

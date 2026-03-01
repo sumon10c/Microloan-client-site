@@ -15,6 +15,7 @@ import LoanApplicationForm from "../page/All Loan/LoanApplicationForm/LoanApplic
 import DassBoard from "../layout/Dasboard/DassBoard";
 import MyLoans from "../layout/Dasboard/MyLoans";
 import Blog from "../page/Blog/Blog";
+import MyProfile from "../layout/Dasboard/MyProfile";
 
 export const router = createBrowserRouter([
     {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
         {
           path:'myLoans',
           Component:MyLoans
+        },
+        {
+          path:'myProfile',
+          Component:MyProfile
         }
       ]
     }
