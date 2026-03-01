@@ -2,13 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import usehook from "../../Context/Hook/usehook";
 import Axios from "../../Context/Hook/useAxiousSucere/Axios";
-import { FaCalendarAlt, FaMoneyBillWave, FaClock } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaMoneyBillWave,
+  FaClock,
+  FaCheck,
+  FaTimes,
+} from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const MyLoans = () => {
   const { user } = usehook();
   const axiosSecure = Axios();
 
-  const { data: loansApplication = [], isLoading } = useQuery({
+
+  const {
+    data: loansApplication = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["myLoans", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -19,6 +31,26 @@ const MyLoans = () => {
     },
   });
 
+  // Admin Status Update Function
+  const handleStatusUpdate = async (id, newStatus) => {
+    try {
+      const res = await axiosSecure.patch(`/loansApplication/${id}`, {
+        status: newStatus,
+      });
+      if (res.data.modifiedCount > 0) {
+        Swal.fire({
+          title: `Loan ${newStatus}!`,
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        refetch(); 
+      }
+    } catch (error) {
+      Swal.fire("Error", "Something went wrong", "error");
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
@@ -27,6 +59,8 @@ const MyLoans = () => {
     );
   }
 
+  const isAdmin = user?.email === "admin@gmail.com";
+
   return (
     <div className="p-6 lg:p-10 bg-[#F8FAFC] min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -34,15 +68,17 @@ const MyLoans = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
           <div>
             <h2 className="text-3xl font-black text-slate-900 tracking-tight">
-              My Loan Applications
+              {isAdmin ? "Admin: All Applications" : "My Loan Applications"}
             </h2>
             <p className="text-slate-500 font-medium">
-              Track and manage your requested loans
+              {isAdmin
+                ? "Manage and review all user loan requests"
+                : "Track and manage your requested loans"}
             </p>
           </div>
           <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100">
             <span className="text-xs font-black text-slate-400 uppercase tracking-widest block">
-              Total Applications
+              Total Count
             </span>
             <span className="text-2xl font-black text-blue-600">
               {loansApplication.length}
@@ -57,7 +93,7 @@ const MyLoans = () => {
               <thead className="bg-slate-50">
                 <tr>
                   <th className="py-5 px-6 text-[11px] font-black text-slate-400 uppercase tracking-widest border-none">
-                    Loan Purpose
+                    Loan Info
                   </th>
                   <th className="py-5 px-6 text-[11px] font-black text-slate-400 uppercase tracking-widest border-none">
                     Amount
@@ -71,6 +107,11 @@ const MyLoans = () => {
                   <th className="py-5 px-6 text-[11px] font-black text-slate-400 uppercase tracking-widest border-none">
                     Status
                   </th>
+                  {isAdmin && (
+                    <th className="py-5 px-6 text-[11px] font-black text-slate-400 uppercase tracking-widest border-none text-center">
+                      Actions
+                    </th>
+                  )}
                 </tr>
               </thead>
 
@@ -84,41 +125,35 @@ const MyLoans = () => {
                       <td className="py-5 px-6">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                            {loan.purpose?.charAt(0).toUpperCase()}
+                            {(loan.purpose || "L").charAt(0).toUpperCase()}
                           </div>
                           <div>
                             <p className="font-bold text-slate-800">
                               {loan.purpose}
                             </p>
-                            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-tighter">
-                              ID: {loan._id.slice(-8)}
+                            <p className="text-[10px] text-slate-400 font-medium">
+                              {isAdmin
+                                ? loan.Email
+                                : `ID: ${loan._id.slice(-8)}`}
                             </p>
                           </div>
                         </div>
                       </td>
 
                       <td className="py-5 px-6 font-black text-slate-700">
-                        <div className="flex items-center gap-1">
-                          <span className="text-blue-600 font-bold">৳</span>
-                          {Number(loan.amount).toLocaleString()}
-                        </div>
+                        ৳{Number(loan.amount).toLocaleString()}
                       </td>
 
-                      <td className="py-5 px-6">
-                        <div className="flex items-center gap-2 text-slate-500 font-semibold text-sm">
-                          <FaClock className="text-slate-300" /> {loan.duration}
-                        </div>
+                      <td className="py-5 px-6 text-slate-500 font-semibold text-sm">
+                        {loan.duration}
                       </td>
 
-                      <td className="py-5 px-6">
-                        <div className="flex items-center gap-2 text-slate-500 font-semibold text-sm">
-                          <FaCalendarAlt className="text-slate-300" />
-                          {loan.appliedDate
-                            ? new Date(loan.appliedDate).toLocaleDateString(
-                                "en-GB"
-                              )
-                            : "N/A"}
-                        </div>
+                      <td className="py-5 px-6 text-slate-500 font-semibold text-sm">
+                        {loan.appliedDate
+                          ? new Date(loan.appliedDate).toLocaleDateString(
+                              "en-GB"
+                            )
+                          : "N/A"}
                       </td>
 
                       <td className="py-5 px-6">
@@ -131,22 +166,46 @@ const MyLoans = () => {
                               : "bg-red-50 text-red-600 border-red-100"
                           }`}
                         >
-                          {loan.status}
+                          {loan.status || "Pending"}
                         </span>
                       </td>
+
+                      {/*  Action Buttons for Admin */}
+                      {isAdmin && (
+                        <td className="py-5 px-6">
+                          <div className="flex justify-center gap-2">
+                            <button
+                              disabled={loan.status !== "Pending"}
+                              onClick={() =>
+                                handleStatusUpdate(loan._id, "Approved")
+                              }
+                              className="btn btn-sm btn-ghost text-green-600 bg-green-50 hover:bg-green-600 hover:text-white disabled:bg-slate-100"
+                            >
+                              <FaCheck />
+                            </button>
+                            <button
+                              disabled={loan.status !== "Pending"}
+                              onClick={() =>
+                                handleStatusUpdate(loan._id, "Rejected")
+                              }
+                              className="btn btn-sm btn-ghost text-red-600 bg-red-50 hover:bg-red-600 hover:text-white disabled:bg-slate-100"
+                            >
+                              <FaTimes />
+                            </button>
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="py-20 text-center">
-                      <div className="flex flex-col items-center">
-                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                          <FaMoneyBillWave className="text-slate-200 text-2xl" />
-                        </div>
-                        <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">
-                          No Loan Applications Found
-                        </p>
-                      </div>
+                    <td
+                      colSpan={isAdmin ? "6" : "5"}
+                      className="py-20 text-center"
+                    >
+                      <p className="text-slate-400 font-bold">
+                        No Loan Applications Found
+                      </p>
                     </td>
                   </tr>
                 )}
@@ -154,11 +213,6 @@ const MyLoans = () => {
             </table>
           </div>
         </div>
-
-        {/* Footer Tip */}
-        <p className="mt-8 text-center text-[10px] font-bold text-slate-400 uppercase tracking-[2px]">
-          © LoanLink Secure Dashboard • Internal Use Only
-        </p>
       </div>
     </div>
   );
