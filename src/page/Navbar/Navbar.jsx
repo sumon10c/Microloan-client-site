@@ -12,6 +12,7 @@ const Navbar = () => {
       .catch((error) => console.log(error));
   };
 
+  const isAdmin = user?.email === "admin@gmail.com";
 
   const links = (
     <>
@@ -30,7 +31,9 @@ const Navbar = () => {
       {user && (
         <>
           <li>
-          <NavLink to='/dassBoard/myLoans'>My Loans</NavLink>
+          <NavLink to='/dassBoard/myLoans'>
+          {isAdmin ? "All Applications" : "My Loans"}
+          </NavLink>
           </li>
           <li>
             <NavLink to="/blog">Blog</NavLink>

@@ -99,7 +99,7 @@ const CardDetails = () => {
           </div>
         </div>
 
-        {/* Requirements Section (Nemesis Content Upgrade) */}
+        {/* Requirements Section  */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
             <h4 className="font-bold text-slate-800 mb-3">যোগ্যতা</h4>
