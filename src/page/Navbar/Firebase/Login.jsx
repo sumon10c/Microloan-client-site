@@ -37,9 +37,9 @@ const Login = () => {
   };
 
   return (
-    /* bg-base-100 পুরো ব্যাকগ্রাউন্ডকে ডার্ক থিম অনুযায়ী কালো রাখবে */
+    
     <div className="min-h-screen flex items-center justify-center bg-base-100 text-base-content px-4 py-10 transition-colors duration-300">
-      {/* কার্ড স্টাইল যা রেজিস্ট্রেশন পেজের সাথে মিলবে */}
+     
       <div className="card bg-base-200 w-full max-w-md shadow-2xl border border-base-300">
         <div className="p-8 text-center border-b border-base-300 mb-4">
           <h2 className="text-4xl font-extrabold text-primary">Welcome Back</h2>
