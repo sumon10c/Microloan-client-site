@@ -19,7 +19,6 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-
   const saveUserToDb = async (name, email, photo) => {
     const userInfo = {
       name: name,
@@ -29,37 +28,26 @@ const Register = () => {
       createdAt: new Date().toISOString(),
     };
 
-    console.log(" Attempting to save user to DB...", userInfo);
-
     try {
-      const response = await axiosSecure.put("/users", userInfo);
-      console.log(" User saved successfully to DB:", response.data);
+      await axiosSecure.put("/users", userInfo);
     } catch (err) {
-      console.error(" DB Save Error:", err.response?.data || err.message);
+      console.error("DB Save Error:", err.message);
     }
   };
 
   const handleRegister = async (data) => {
     try {
-      console.log(" Registration started for:", data.email);
-      
       const profilePhoto = data.photo[0];
       const formData = new FormData();
       formData.append("image", profilePhoto);
 
-      
-      console.log(" Uploading image to ImgBB...");
-      const imgApi = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
+      const imgApi = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_host
+      }`;
       const res = await axios.post(imgApi, formData);
       const photoURL = res.data.data.display_url;
-      console.log(" Image uploaded! URL:", photoURL);
 
-      
-      console.log(" Registering user in Firebase...");
       await registerUser(data.email, data.password, data.name, photoURL);
-      console.log(" Firebase registration complete.");
-
-      
       await saveUserToDb(data.name, data.email, photoURL);
 
       Swal.fire({
@@ -70,14 +58,11 @@ const Register = () => {
         timer: 1500,
       });
 
-      console.log(" Waiting 1s before redirect and reload...");
       setTimeout(() => {
         navigate(location?.state || "/");
         window.location.reload();
       }, 1000);
-
     } catch (error) {
-      console.error(" Global Registration Error:", error);
       Swal.fire({
         icon: "error",
         title: "Registration Failed",
@@ -87,85 +72,128 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4 py-10">
-      <div className="card bg-base-100 w-full max-w-md shadow-xl border border-gray-100">
-        <div className="p-8 text-center">
-          <h2 className="text-3xl font-bold text-primary">Create Account</h2>
-          <p className="text-gray-500 mt-2">Join us to manage your microloans</p>
+    <div className="min-h-screen flex items-center justify-center bg-base-100 text-base-content px-4 py-10 transition-colors duration-300">
+      <div className="card bg-base-200 w-full max-w-md shadow-2xl border border-base-300">
+        <div className="p-8 text-center border-b border-base-300 mb-4">
+          <h2 className="text-4xl font-extrabold text-primary">
+            Create Account
+          </h2>
+          <p className="opacity-70 mt-2">Join us to manage your microloans</p>
         </div>
 
-        <form onSubmit={handleSubmit(handleRegister)} className="card-body pt-0">
+        <form
+          onSubmit={handleSubmit(handleRegister)}
+          className="card-body pt-0 space-y-4"
+        >
           {/* Full Name */}
           <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-semibold">Full Name</span>
+            <label className="mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-wide">
+                Full Name
+              </span>
             </label>
             <input
               type="text"
               {...register("name", { required: "Name is required" })}
-              className={`input input-bordered w-full ${errors.name ? "border-red-500" : ""}`}
-              placeholder="Enter your name"
+              className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary border-gray-600"
+              placeholder="Sumon Chakrabarty"
             />
-            {errors.name && <span className="text-red-500 text-xs mt-1">{errors.name.message}</span>}
+            {errors.name && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.name.message}
+              </span>
+            )}
           </div>
 
-          {/* Photo */}
+          {/* Profile Photo */}
           <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-semibold">Profile Photo</span>
+            <label className="mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-wide">
+                Profile Photo
+              </span>
             </label>
             <input
               type="file"
               {...register("photo", { required: "Photo is required" })}
-              className={`file-input file-input-bordered w-full ${errors.photo ? "border-red-500" : ""}`}
+              className="file-input file-input-bordered w-full bg-base-100 text-base-content border-gray-600"
             />
-            {errors.photo && <span className="text-red-500 text-xs mt-1">{errors.photo.message}</span>}
+            {errors.photo && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.photo.message}
+              </span>
+            )}
           </div>
 
-          {/* Email */}
+          {/* Email Address */}
           <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-semibold">Email Address</span>
+            <label className="mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-wide">
+                Email Address
+              </span>
             </label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className={`input input-bordered w-full ${errors.email ? "border-red-500" : ""}`}
-              placeholder="Enter your email"
+              className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary border-gray-600"
+              placeholder="example@mail.com"
             />
-            {errors.email && <span className="text-red-500 text-xs mt-1">{errors.email.message}</span>}
+            {errors.email && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </span>
+            )}
           </div>
 
           {/* Password */}
           <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-semibold">Password</span>
+            <label className="mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-wide">
+                Password
+              </span>
             </label>
             <input
               type="password"
               {...register("password", {
                 required: "Password is required",
-                minLength: { value: 6, message: "Must be 6+ chars" },
-                pattern: {
-                  value: /(?=.*[a-z])(?=.*[A-Z])/,
-                  message: "Uppercase & Lowercase needed",
-                },
+                minLength: { value: 6, message: "Must be 6+ characters" },
               })}
-              className={`input input-bordered w-full ${errors.password ? "border-red-500" : ""}`}
-              placeholder="Enter password"
+              className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary border-gray-600"
+              placeholder="••••••••"
             />
-            {errors.password && <span className="text-red-500 text-xs mt-1">{errors.password.message}</span>}
+            {errors.password && (
+              <span className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </span>
+            )}
           </div>
 
-          <button type="submit" disabled={loading} className="btn btn-primary w-full mt-6 text-white">
-            {loading ? <span className="loading loading-spinner"></span> : "Register"}
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary w-full mt-4 text-white font-bold text-lg border-none"
+          >
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Register Now"
+            )}
           </button>
 
-          <div className="divider text-gray-400 text-xs mt-6">OR REGISTER WITH</div>
-          <SocialLogin />
+          <div className="divider opacity-50 text-xs uppercase">
+            Or Connect With
+          </div>
+
+          <div className="flex justify-center">
+            <SocialLogin />
+          </div>
+
           <p className="text-center mt-6 text-sm">
             Already have an account?{" "}
-            <Link state={location.state} to="/login" className="text-primary font-bold ml-1 hover:underline">
+            <Link
+              state={location.state}
+              to="/login"
+              className="text-primary font-bold ml-1 hover:underline underline-offset-4"
+            >
               Login here
             </Link>
           </p>

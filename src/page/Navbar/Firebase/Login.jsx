@@ -37,26 +37,33 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4">
-      <div className="card bg-base-100 w-full max-w-md shadow-xl border border-gray-100">
-        <div className="p-8 text-center">
-          <h2 className="text-3xl font-bold text-primary">Welcome Back</h2>
-          <p className="text-gray-500 mt-2">Log in to manage your microloans</p>
+    /* bg-base-100 পুরো ব্যাকগ্রাউন্ডকে ডার্ক থিম অনুযায়ী কালো রাখবে */
+    <div className="min-h-screen flex items-center justify-center bg-base-100 text-base-content px-4 py-10 transition-colors duration-300">
+      {/* কার্ড স্টাইল যা রেজিস্ট্রেশন পেজের সাথে মিলবে */}
+      <div className="card bg-base-200 w-full max-w-md shadow-2xl border border-base-300">
+        <div className="p-8 text-center border-b border-base-300 mb-4">
+          <h2 className="text-4xl font-extrabold text-primary">Welcome Back</h2>
+          <p className="opacity-70 mt-2">Log in to manage your microloans</p>
         </div>
 
-        <form onSubmit={handleSubmit(handleLogin)} className="card-body pt-0">
+        <form
+          onSubmit={handleSubmit(handleLogin)}
+          className="card-body pt-0 space-y-4"
+        >
           {/* Email Field */}
           <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-semibold">Email Address</span>
+            <label className="mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-wide">
+                Email Address
+              </span>
             </label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className={`input input-bordered w-full ${
+              className={`input input-bordered w-full bg-base-100 text-base-content border-gray-600 focus:border-primary ${
                 errors.email ? "border-red-500" : ""
               }`}
-              placeholder="Enter your email"
+              placeholder="admin@gmail.com"
             />
             {errors.email && (
               <span className="text-red-500 text-xs mt-1">
@@ -65,18 +72,20 @@ const Login = () => {
             )}
           </div>
 
-          {/* Password Field - Fixed Version */}
-          <div className="form-control w-full mt-2">
-            <label className="label">
-              <span className="label-text font-semibold">Password</span>
+          {/* Password Field */}
+          <div className="form-control w-full">
+            <label className="mb-2 block">
+              <span className="text-sm font-bold uppercase tracking-wide">
+                Password
+              </span>
             </label>
             <input
               type="password"
               {...register("password", { required: "Password is required" })}
-              className={`input input-bordered w-full ${
+              className={`input input-bordered w-full bg-base-100 text-base-content border-gray-600 focus:border-primary ${
                 errors.password ? "border-red-500" : ""
               }`}
-              placeholder="Enter your password"
+              placeholder="••••••••"
             />
             {errors.password && (
               <span className="text-red-500 text-xs mt-1">
@@ -85,17 +94,17 @@ const Login = () => {
             )}
           </div>
 
-          <div className="flex justify-between items-center mt-4">
+          <div className="flex justify-between items-center mt-2">
             <label className="label cursor-pointer gap-2 p-0">
               <input
                 type="checkbox"
-                className="checkbox checkbox-xs checkbox-primary"
+                className="checkbox checkbox-xs checkbox-primary border-gray-500"
               />
-              <span className="label-text">Remember me</span>
+              <span className="label-text text-sm">Remember me</span>
             </label>
             <button
               type="button"
-              className="text-primary hover:underline text-sm font-medium bg-transparent border-none"
+              className="text-primary hover:underline text-sm font-bold bg-transparent border-none"
             >
               Forgot password?
             </button>
@@ -104,27 +113,29 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary w-full mt-6 text-white"
+            className="btn btn-primary w-full mt-4 text-white font-bold text-lg border-none"
           >
             {loading ? (
               <span className="loading loading-spinner"></span>
             ) : (
-              "Login"
+              "Login Now"
             )}
           </button>
 
-          <div className="divider text-gray-400 text-xs mt-6">
-            OR LOGIN WITH
+          <div className="divider opacity-50 text-xs uppercase">
+            Or Continue With
           </div>
 
-          <SocialLogin />
+          <div className="flex justify-center">
+            <SocialLogin />
+          </div>
 
           <p className="text-center mt-6 text-sm">
             Don't have an account?
             <Link
               state={location.state}
               to="/register"
-              className="text-primary font-bold ml-1 hover:underline"
+              className="text-primary font-bold ml-1 hover:underline underline-offset-4"
             >
               Register here
             </Link>
