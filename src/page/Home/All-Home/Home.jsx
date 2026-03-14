@@ -7,6 +7,7 @@ import LatestLoanCard from "../../latestLoan/LatestLoanCard";
 import LatestLoans from "../../latestLoan/LatestLoans";
 import WhyChooseUs from "./whyChooseUs";
 import OurServices from "./OurServices";
+import Milestones from "./Milestones";
 
 
 const Home = () => {
@@ -17,6 +18,7 @@ const Home = () => {
       <HowItWorks></HowItWorks>
       <FAQ></FAQ>
       <WhyChooseUs></WhyChooseUs>
+      <Milestones></Milestones>
       <CustomerFeedback></CustomerFeedback>
       <OurServices></OurServices>
     </div>
