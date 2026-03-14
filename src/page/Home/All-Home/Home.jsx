@@ -6,6 +6,7 @@ import FAQ from "./FAQ";
 import LatestLoanCard from "../../latestLoan/LatestLoanCard";
 import LatestLoans from "../../latestLoan/LatestLoans";
 import WhyChooseUs from "./whyChooseUs";
+import OurServices from "./OurServices";
 
 
 const Home = () => {
@@ -17,6 +18,7 @@ const Home = () => {
       <FAQ></FAQ>
       <WhyChooseUs></WhyChooseUs>
       <CustomerFeedback></CustomerFeedback>
+      <OurServices></OurServices>
     </div>
   );
 };
